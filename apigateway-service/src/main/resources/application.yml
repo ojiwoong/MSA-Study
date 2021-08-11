@@ -23,10 +23,26 @@ spring:
             - AddResponseHeader=first-response, Hello
         - id: user-service
           predicates:
-            - Path=/user-service/**
+            - Path=/user-service/login
+            - Method=POST
           uri: lb://USER-SERVICE
           filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
+            - Path=/user-service/**
+            - Method=GET
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
         - id: catalog-service
           predicates:
             - Path=/catalog-service/**
@@ -40,9 +56,17 @@ spring:
           filters:
             - RewritePath=/order-service/(?<segment>.*), /$\{segment}
 
+token:
+  secret: user_token
+
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone : http://localhost:8761/eureka
+    instance:
+      instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${random.value}}
+      prefer-ip-address: true
+
+
