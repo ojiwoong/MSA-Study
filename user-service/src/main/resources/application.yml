@@ -25,6 +25,11 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
 
 greeting:
   message: Welcome to the simple E-commerce.
+
+token:
+  expiration_time: 864000000 #10 days
+  secret: user_token
