@@ -37,6 +37,13 @@ spring:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
         - id: user-service
           predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET, POST
+          uri: lb://USER-SERVICE
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        - id: user-service
+          predicates:
             - Path=/user-service/**
             - Method=GET
           uri: lb://USER-SERVICE
@@ -56,17 +63,24 @@ spring:
           filters:
             - RewritePath=/order-service/(?<segment>.*), /$\{segment}
 
-token:
-  secret: user_token
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh,health,beans,httptrace
+  trace:
+    http:
+      include: RESPONSE_HEADERS
 
 eureka:
   client:
-    register-with-eureka: true
     fetch-registry: true
+    register-with-eureka: true
     service-url:
-      defaultZone : http://localhost:8761/eureka
-    instance:
-      instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${random.value}}
-      prefer-ip-address: true
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+
 
 
