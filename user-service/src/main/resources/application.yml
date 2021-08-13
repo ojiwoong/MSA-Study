@@ -4,6 +4,12 @@ server:
 spring:
   application:
     name: user-service
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      name: ecommerce
+      profile : real
   h2:
     console:
       enabled: true
@@ -34,4 +40,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: info, refresh, health, beans
+        include: info, refresh, health, beans, busrefresh

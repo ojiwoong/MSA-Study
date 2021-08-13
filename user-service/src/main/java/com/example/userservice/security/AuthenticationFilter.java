@@ -21,8 +21,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -59,11 +62,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String userName = ((User)authResult.getPrincipal()).getUsername();
         UserDto userDetails = userService.getUserDetailsByEmail(userName);
 
+        Map<String, Object> headers = new HashMap<>();
+
         String token = Jwts.builder()
                         .setSubject(userDetails.getUserId())
                         .setExpiration(new Date(System.currentTimeMillis()
                                 + Long.parseLong(env.getProperty("token.expiration_time"))))
-                        .signWith(SignatureAlgorithm.HS256, env.getProperty("token.secret"))
+                        .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
                         .compact();
 
         response.addHeader("userId", userName);
