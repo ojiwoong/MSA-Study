@@ -9,6 +9,7 @@ import com.netflix.discovery.converters.Auto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,22 @@ import java.util.List;
 @RequestMapping("/")
 public class OrderController {
     OrderService orderService;
+    Environment env;
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, Environment env) {
         this.orderService = orderService;
+        this.env = env;
     }
 
     @GetMapping("/health_check")
     public String status(HttpServletRequest request){
-        return String.format("It's Working in User Service %s", request.getServerPort());
+        return String.format("It's Working in User Service," +
+                        "port(local.server.port)=%s, port(server.port)=%s," +
+                        "token_secret=%s, token_expiration_time=%s," +
+                        "gateway_ip=%s",
+                env.getProperty("local.server.port"), env.getProperty("server.port"),
+                env.getProperty("token.secret"), env.getProperty("token.expiration_time"), env.getProperty("gateway.ip"));
     }
 
     @PostMapping(value = "/{userId}/orders")

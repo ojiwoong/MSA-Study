@@ -8,8 +8,10 @@ import com.example.userservice.vo.ResponseUser;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +36,10 @@ public class UsersController {
         return String.format("It's Working in User Service," +
                 "port(local.server.port)=%s, port(server.port)=%s," +
                 "token_secret=%s, token_expiration_time=%s," +
-                "gateway_ip=%s",
+                "gateway_ip=%s, order_url=%s",
                 env.getProperty("local.server.port"), env.getProperty("server.port"),
-                env.getProperty("token.secret"), env.getProperty("token.expiration_time"), env.getProperty("gateway.ip"));
+                env.getProperty("token.secret"), env.getProperty("token.expiration_time"), env.getProperty("gateway.ip"),
+                env.getProperty("orderservice.url"));
     }
 
     @GetMapping("/welcome")
