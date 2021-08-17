@@ -13,4 +13,7 @@ public interface OrderServiceClient {
 
     @GetMapping(value = "/{userId}/orders")
     public List<ResponseOrder> getOrders(@PathVariable String userId);
+
+    @GetMapping(value = "/{userId}/orders_wrong")
+    public List<ResponseOrder> getOrdersWrong(@PathVariable String userId);
 }

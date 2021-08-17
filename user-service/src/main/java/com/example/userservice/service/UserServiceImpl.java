@@ -6,6 +6,7 @@ import com.example.userservice.entity.UserEntity;
 import com.example.userservice.jpa.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
 import com.netflix.discovery.converters.Auto;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -93,7 +94,17 @@ public class UserServiceImpl implements UserService{
         /**
          * #2) Open Feign
          */
-        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
+//        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
+
+        List<ResponseOrder> orderList = null;
+
+        try{
+            orderList = orderServiceClient.getOrdersWrong(userId);
+        } catch (FeignException ex) {
+            log.error(ex.getMessage());
+        }
+
+
 
         userDto.setOrders(orderList);
 
