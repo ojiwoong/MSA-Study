@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService{
         /** order-service에서 주문 내역 조회
          * #1) RestTemplate
          */
-//        String orderUrl = String.format(env.getProperty("orderservice.url"), userId);
+//        String orderUrl = String.format(env.getProperty("order-service.url"), userId);
 //        ResponseEntity<List<ResponseOrder>> orderListResponse = restTemplate.exchange(orderUrl, HttpMethod.GET, null,
 //                                                                        new ParameterizedTypeReference<List<ResponseOrder>>() {});
 //        List<ResponseOrder> orderList = orderListResponse.getBody();
