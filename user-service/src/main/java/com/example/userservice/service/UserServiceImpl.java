@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService{
         List<ResponseOrder> orderList = null;
 
         try{
-            orderList = orderServiceClient.getOrdersWrong(userId);
+            orderList = orderServiceClient.getOrders(userId);
         } catch (FeignException ex) {
             log.error(ex.getMessage());
         }
