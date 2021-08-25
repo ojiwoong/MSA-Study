@@ -24,4 +24,9 @@ public class CatalogServiceImpl implements CatalogService{
     public Iterable<CatalogEntity> getAllCatalogs() {
         return repository.findAll();
     }
+
+    @Override
+    public CatalogEntity getCatalog(String productId) {
+        return repository.findByProductId(productId);
+    }
 }

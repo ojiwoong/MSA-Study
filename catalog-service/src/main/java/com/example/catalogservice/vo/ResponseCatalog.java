@@ -10,7 +10,7 @@ import java.util.Date;
 public class ResponseCatalog {
     private String productId;
     private String productName;
-    private Integer sotck;
+    private Integer stock;
     private Integer unitPrice;
     private Date createdAt;
 }

@@ -9,20 +9,20 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name="catalog")
+@Table(name = "catalog")
 public class CatalogEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 120, unique = true)
     private String productId;
     @Column(nullable = false)
     private String productName;
     @Column(nullable = false)
-    private String stock;
+    private Integer stock;
     @Column(nullable = false)
-    private String unitPrice;
+    private Integer unitPrice;
 
     @Column(nullable = false, updatable = false, insertable = false)
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
