@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: order-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   zipkin:
     base-url: http://localhost:9411
     enabled: true
@@ -22,7 +27,7 @@ spring:
     defer-datasource-initialization: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:13306/mydb
+    url: jdbc:mariadb://127.0.0.1:3306/mydb
     username: root
     password: test1357
 #    driver-class-name: org.h2.Driver
@@ -45,3 +50,6 @@ management:
     web:
       exposure:
         include: info, refresh, health, beans, busrefresh
+
+kafka:
+  url: 127.0.0.1:9092

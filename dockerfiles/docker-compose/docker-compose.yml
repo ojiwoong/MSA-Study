@@ -1,0 +1,15 @@
+version: "3.9"
+services :
+  myweb:
+    image: mynode:latest
+    ports: 
+      - "18000:18000"
+  mydb:
+    image: mariadb:latest
+    volumes: 
+      - D:/TmaxEducation/MSA/workspace/dockerfiles/dbdata/:/var/lib/mysql
+    ports: 
+    - "13306:3306"
+    environment: 
+      MARIADB_ROOT_PASSWORD: test1357
+      MARIADB_DATABASE: mydb

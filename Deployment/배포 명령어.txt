@@ -1,0 +1,47 @@
+// 네트워크 생성 및 상세 정보 확인 
+docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 ecommerce-network
+docker network ls
+docker network inspect ecommerce-network
+
+// RabbitMQ 실행 및 상세 정보 확인
+docker run -d —-name rabbitmq —-network ecommerce-network -p 15672:15672 -p 5672:5672 -p 15671:15671 -p 5671:5671 -p 4369:4369 -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest rabbitmq:management
+docker inspect rabbitmq
+
+// RabbitMQ 웹에 접속하여 확인
+http://127.0.0.1:15672/
+ID : guest
+PW : guest
+
+// config-service 컨테이너 실행
+docker run -d --name config-service --network ecommerce-network -p 8888:8888 ^
+            -e "spring.rabbitmq.host=rabbitmq" -e "spring.profiles.active=git" ojiwoong/config-service:1.0
+
+// service-discovery 컨테이너 실행
+docker run -d --name service-discovery --network ecommerce-network -p 8761:8761 ^
+            -e "spring.cloud.config.uri=http://config-service:8888" ojiwoong/service-discovery:1.0
+
+// apigateway 컨테이너 실행
+docker run -d --name apigateway-service --network ecommerce-network -p 8000:8000 ^
+            -e "spring.cloud.config.uri=http://config-service:8888" -e "spring.rabbitmq.host=rabbitmq" -e eureka.client.serviceUrl.defaultZone=http://service-discovery:8761/eureka/ ojiwoong/apigateway-service:1.0
+
+// Mariadb 컨테이너 실행
+docker run -d --name mariadb --network ecommerce-network -p 13306:3306 ojiwoong/mydb:1.0
+
+
+// kafka 로컬 드라이브에 클론
+git clone https://github.com/wurstmeister/kafka-docker
+
+// docker-compose 컨테이너 실행 및 삭제 (zookeeper, kafka)
+docker-compose -f docker-compose-single-broker.yml up -d
+docker-compose down
+
+// zipkin 컨테이너 실행
+docker run -d --name zipkin --network ecommerce-network -p 9411:9411 openzipkin/zipkin
+
+docker run -d --name user-service --network ecommerce-network -p 50001:50001 ^
+    -e "spring.cloud.config.uri=http://config-service:8888"^
+    -e "eureka.client.serviceUrl.defaultZone=http://service-discovery:8761/eureka/"^
+    -e "spring.rabbitmq.host=rabbitmq"^
+    -e "spring.zipkin.base-url=http://zipkin:9411"^
+    -e "logging.file=/api-logs/user-ms.log"^
+    ojiwoong/user-service

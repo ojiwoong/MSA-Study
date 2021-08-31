@@ -98,18 +98,20 @@ public class OrderController {
             orderDto.setUserId(userId);
 
             /* jpa */
-//            OrderDto createDto = orderService.createOrder(orderDto);
-//            ResponseOrder returnValue = modelMapper.map(createDto, ResponseOrder.class);
+            OrderDto createDto = orderService.createOrder(orderDto);
+            ResponseOrder returnValue = modelMapper.map(createDto, ResponseOrder.class);
 
             /* kafka */
+/*
             orderDto.setOrderId(UUID.randomUUID().toString());
             orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
             orderDto.setInstanceId(env.getProperty("eureka.instance.instance-id"));
             ResponseOrder returnValue = modelMapper.map(orderDto, ResponseOrder.class);
+*/
 
             /* send message to kafka topic */
             kafkaProducer.send("example-catalog-topic", orderDto);
-            orderProducer.send("orders", orderDto);
+            //orderProducer.send("orders", orderDto);
 
             /* store a json file with orderDto */
 

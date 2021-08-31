@@ -1,0 +1,13 @@
+[MSA 접속정보]
+hostname : localhost
+172.18.0.3:8888 : config-server
+172.18.0.4:8761 : service-discover
+172.18.0.5:8000 : apigateway-server
+172.18.0.6:13306 : mariadb
+:50003 : catalog-server
+:50004 : order-server
+:50001 : user-server
+172.18.0.2:15672 : rabbitmq
+172.18.0.100:2181 : zookeeper-server
+172.18.0.101:9092 : kafka-server
+:8083 : kafka connect-server
